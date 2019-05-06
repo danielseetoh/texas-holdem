@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Created by danielseetoh on 5/7/19.
  */
 public class Player {
-    public ArrayList<Card> hand;
+    public Card[] hand;
     public User user;
 
     public Player(User user) {
