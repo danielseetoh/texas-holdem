@@ -1,0 +1,8 @@
+package com.luckbox.holdem.models.game;
+
+/**
+ * Created by danielseetoh on 5/6/19.
+ */
+public enum CardNumber {
+    ace, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king
+}
