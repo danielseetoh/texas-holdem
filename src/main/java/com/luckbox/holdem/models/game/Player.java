@@ -10,8 +10,10 @@ import java.util.ArrayList;
 public class Player {
     public Card[] hand;
     public User user;
+    public Double chipValue;
 
-    public Player(User user) {
+    public Player(User user, Double chipValue) {
         this.user = user;
+        this.chipValue = chipValue;
     }
 }
