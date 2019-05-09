@@ -5,11 +5,11 @@ package com.luckbox.holdem.models.game;
  */
 public class Card {
 
-    public CardNumber number;
-    public CardSuit suit;
+    public final CardNumber number;
+    public final CardSuit suit;
 
     public Card(CardNumber num, CardSuit suit) {
-        this.number = number;
+        this.number = num;
         this.suit = suit;
     }
 }
