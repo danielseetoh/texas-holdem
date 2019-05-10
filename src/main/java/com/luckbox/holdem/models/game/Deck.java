@@ -17,4 +17,8 @@ public class Deck {
             }
         }
     }
+
+    public Card dealCard() {
+        // truely randomly pick a card, remove from deck, and return it
+    }
 }
