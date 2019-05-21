@@ -1,6 +1,7 @@
 package com.luckbox.holdem.models.game;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -19,8 +20,9 @@ public class GameEvaluator {
 
     public Card[] getBestCombo(Player player, Card[] communityCards) {
 
-        List<Card> list = Arrays.asList(communityCards);
-        list.addAll(Arrays.asList(player.hand));
+        List<Card> cards = Arrays.asList(communityCards);
+        cards.addAll(Arrays.asList(player.hand));
+        Collections.sort(cards);
 
         // search for highest straight flush
         // search for quads and other highest card
