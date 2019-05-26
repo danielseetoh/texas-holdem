@@ -3,6 +3,8 @@ package com.luckbox.holdem.controllers;
 
 import com.luckbox.holdem.models.game.Card;
 import com.luckbox.holdem.models.game.Deck;
+import com.luckbox.holdem.models.game.GameEvaluator;
+import com.luckbox.holdem.models.game.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,12 +23,19 @@ import com.luckbox.holdem.repositories.UserRepository;
 public class GameController {
     @GetMapping(path="/cards")
     public @ResponseBody String getCards() {
-        // log generated cards
+        // TODO: log generated cards
 
         Deck deck = new Deck();
         for (Card card : deck.deck) {
             System.out.println(card.toString());
         }
+
+        return "Cards";
+    }
+
+    @GetMapping(path="/test")
+    public @ResponseBody String getTest() {
+        GameEvaluator.getBestCombo(null);
 
         return "Cards";
     }

@@ -23,6 +23,6 @@ public class Card implements Comparable<Card> {
 
     @Override
     public String toString() {
-        return "Number: " + this.number + "      Suit: " + this.suit;
+        return this.number + " of " + this.suit;
     }
 }
