@@ -1,5 +1,7 @@
 package com.luckbox.holdem.models.game;
 
+import java.util.Objects;
+
 /**
  * Created by danielseetoh on 5/5/19.
  */
@@ -24,5 +26,23 @@ public class Card implements Comparable<Card> {
     @Override
     public String toString() {
         return this.number + " of " + this.suit;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+
+        if (o instanceof Card && ((Card) o).number == this.number && ((Card) o).suit == this.suit) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.number, this.suit);
     }
 }

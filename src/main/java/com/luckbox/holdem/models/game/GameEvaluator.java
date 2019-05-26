@@ -97,7 +97,7 @@ public class GameEvaluator {
 //            List<Card> cardsList = Arrays.asList(cards);
 //            Collections.sort(cardsList);
 //
-//            highestCombo = getHighestStraightFlush(cardsList);
+//            bestCombo = getHighestStraightFlush(cardsList);
 //        }
 
         // search for quads and other highest card
@@ -141,13 +141,9 @@ public class GameEvaluator {
         // handle a wheel (e.g. ace to five)
         if (straightFlushCards.size() == 4) {
             currentCard = straightFlushCards.get(0);
-            if (currentCard.number == CardNumber.two) {
-                for (Card card : cardsList) {
-                    if (card.number == CardNumber.ace && card.suit.equals(currentCard.suit)) {
-                        straightFlushCards.add(0, card);
-                        break;
-                    }
-                }
+            Card aceWheelCard = new Card(CardNumber.ace, currentCard.suit);
+            if (currentCard.number == CardNumber.two && cardsList.contains(aceWheelCard)) {
+                straightFlushCards.add(0, aceWheelCard);
             }
         }
 
