@@ -20,71 +20,7 @@ public class GameEvaluator {
     }
 
     public static List<Card> getBestCombo(Card[] cardsArr) {
-//        Card[][] cardsArrArr = new Card[][]{
-//            {
-//                new Card(CardNumber.ace, CardSuit.spades),
-//                new Card(CardNumber.four, CardSuit.hearts),
-//                new Card(CardNumber.three, CardSuit.hearts),
-//                new Card(CardNumber.five, CardSuit.hearts),
-//                new Card(CardNumber.seven, CardSuit.hearts),
-//                new Card(CardNumber.six, CardSuit.hearts),
-//                new Card(CardNumber.ace, CardSuit.hearts),
-//            },
-//            {
-//                new Card(CardNumber.ace, CardSuit.spades),
-//                new Card(CardNumber.four, CardSuit.hearts),
-//                new Card(CardNumber.three, CardSuit.spades),
-//                new Card(CardNumber.five, CardSuit.hearts),
-//                new Card(CardNumber.seven, CardSuit.hearts),
-//                new Card(CardNumber.six, CardSuit.hearts),
-//                new Card(CardNumber.ace, CardSuit.hearts),
-//            },
-//            {
-//                new Card(CardNumber.ace, CardSuit.hearts),
-//                new Card(CardNumber.two, CardSuit.hearts),
-//                new Card(CardNumber.three, CardSuit.hearts),
-//                new Card(CardNumber.five, CardSuit.hearts),
-//                new Card(CardNumber.four, CardSuit.hearts),
-//                new Card(CardNumber.six, CardSuit.hearts),
-//                new Card(CardNumber.ace, CardSuit.spades),
-//            },
-//            {
-//                new Card(CardNumber.ace, CardSuit.hearts),
-//                new Card(CardNumber.two, CardSuit.hearts),
-//                new Card(CardNumber.three, CardSuit.hearts),
-//                new Card(CardNumber.five, CardSuit.hearts),
-//                new Card(CardNumber.four, CardSuit.hearts),
-//                new Card(CardNumber.six, CardSuit.spades),
-//                new Card(CardNumber.ace, CardSuit.spades),
-//            },
-//            {
-//                new Card(CardNumber.ace, CardSuit.hearts),
-//                new Card(CardNumber.jack, CardSuit.hearts),
-//                new Card(CardNumber.queen, CardSuit.hearts),
-//                new Card(CardNumber.ten, CardSuit.hearts),
-//                new Card(CardNumber.king, CardSuit.hearts),
-//                new Card(CardNumber.six, CardSuit.spades),
-//                new Card(CardNumber.ace, CardSuit.spades),
-//            },
-//            {
-//                new Card(CardNumber.two, CardSuit.hearts),
-//                new Card(CardNumber.two, CardSuit.spades),
-//                new Card(CardNumber.three, CardSuit.hearts),
-//                new Card(CardNumber.six, CardSuit.hearts),
-//                new Card(CardNumber.five, CardSuit.hearts),
-//                new Card(CardNumber.six, CardSuit.spades),
-//                new Card(CardNumber.four, CardSuit.hearts),
-//            },
-//            {
-//                new Card(CardNumber.ten, CardSuit.hearts),
-//                new Card(CardNumber.eight, CardSuit.spades),
-//                new Card(CardNumber.ace, CardSuit.hearts),
-//                new Card(CardNumber.six, CardSuit.hearts),
-//                new Card(CardNumber.five, CardSuit.hearts),
-//                new Card(CardNumber.six, CardSuit.spades),
-//                new Card(CardNumber.four, CardSuit.hearts),
-//            }
-//        };
+
         List<Card> cardsList = Arrays.asList(cardsArr);
         Collections.sort(cardsList);
         List<Card> bestCombo = null;
@@ -93,12 +29,6 @@ public class GameEvaluator {
 
         // search for highest straight flush
         bestCombo = getHighestStraightFlush(cardsList);
-//        for (Card[] cards : cardsArrArr) {
-//            List<Card> cardsList = Arrays.asList(cards);
-//            Collections.sort(cardsList);
-//
-//            bestCombo = getHighestStraightFlush(cardsList);
-//        }
 
         // search for quads and other highest card
         // search for highest full house
