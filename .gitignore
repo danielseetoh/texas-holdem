@@ -79,3 +79,6 @@ fabric.properties
 
 # Sonarlint plugin
 .idea/sonarlint
+
+# Generated files
+target/
