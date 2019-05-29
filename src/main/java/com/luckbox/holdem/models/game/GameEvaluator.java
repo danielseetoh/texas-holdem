@@ -9,6 +9,7 @@ import java.util.List;
  * Created by danielseetoh on 5/7/19.
  */
 public class GameEvaluator {
+    // to refactor and get rid of magic numbers
 
     public List<Player> getWinningPlayers(Player[] players, Card[] communityCards) {
         // get best combo of each player
@@ -29,8 +30,8 @@ public class GameEvaluator {
 
         // search for highest straight flush
         bestCombo = getHighestStraightFlush(cardsList);
-
         // search for quads and other highest card
+
         // search for highest full house
         // search for highest flush
         // search for highest straight
@@ -42,15 +43,15 @@ public class GameEvaluator {
         return bestCombo;
     }
 
-    public static List<Card> getHighestStraightFlush(List<Card> cardsList) {
+    public static List<Card> getHighestStraightFlush(List<Card> sortedCardsList) {
         List<Card> straightFlushCards = new ArrayList<>();
         Card currentCard = null, prevCard = null;
 
-        straightFlushCards.add(cardsList.get(cardsList.size() - 1));
+        straightFlushCards.add(sortedCardsList.get(sortedCardsList.size() - 1));
 
         // iterate through the cards from top down
-        for (int i = cardsList.size() - 2; i >= 0; i--) {
-            currentCard = cardsList.get(i);
+        for (int i = sortedCardsList.size() - 2; i >= 0; i--) {
+            currentCard = sortedCardsList.get(i);
             prevCard = straightFlushCards.get(0);
             if (currentCard.number == prevCard.number) {
                 continue;
@@ -72,7 +73,7 @@ public class GameEvaluator {
         if (straightFlushCards.size() == 4) {
             currentCard = straightFlushCards.get(0);
             Card aceWheelCard = new Card(CardNumber.ace, currentCard.suit);
-            if (currentCard.number == CardNumber.two && cardsList.contains(aceWheelCard)) {
+            if (currentCard.number == CardNumber.two && sortedCardsList.contains(aceWheelCard)) {
                 straightFlushCards.add(0, aceWheelCard);
             }
         }
@@ -83,6 +84,26 @@ public class GameEvaluator {
             return straightFlushCards.subList(straightFlushNumCards - 5, straightFlushNumCards);
         }
 
+        return null;
+    }
+    
+    public static List<Card> getQuads(List<Card> sortedCardsList) {
+        int consecutiveSameNumber = 1;
+        Card prevCard = sortedCardsList.get(0), currentCard = null;
+        
+        for (int i = 1; i < sortedCardsList.size(); i++) {
+            currentCard = sortedCardsList.get(i);
+            if (currentCard.number == prevCard.number) {
+                consecutiveSameNumber++;
+            } else {
+                consecutiveSameNumber = 1;
+            }
+            if (consecutiveSameNumber >= 4) {
+                return sortedCardsList.subList(i - 3, i + 1);
+            }
+            prevCard = currentCard;
+        }
+        
         return null;
     }
 }
