@@ -1,9 +1,8 @@
 package com.luckbox.holdem.models.game;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * Created by danielseetoh on 5/7/19.
@@ -22,13 +21,17 @@ public class GameEvaluator {
 
         List<Card> cardsList = Arrays.asList(cardsArr);
         Collections.sort(cardsList);
-        List<Card> bestCombo = null;
 
         // Possible to generalize the rules for different games?
 
-        // search for highest straight flush
-        bestCombo = getHighestStraightFlush(cardsList);
-        // search for quads and other highest card
+        // search for highest combo
+        List<Card> bestCombo = Stream.<Supplier<List<Card>>> of (
+            () -> getHighestStraightFlush(cardsList),
+            () -> getQuads(cardsList))
+            .map(Supplier::get)
+            .filter(Objects::nonNull)
+            .findFirst()
+            .orElse(null);
 
         // search for highest full house
         // search for highest flush
@@ -100,7 +103,7 @@ public class GameEvaluator {
                 consecutiveSameNumber = 1;
             }
             if (consecutiveSameNumber >= QUADS_NUM_CARDS) {
-                return sortedCardsList.subList(i - QUADS_NUM_CARDS - 1, i + 1);
+                return sortedCardsList.subList(i - (QUADS_NUM_CARDS - 1), i + 1);
             }
             prevCard = currentCard;
         }
