@@ -17,34 +17,32 @@ public class GameEvaluator {
         return null;
     }
 
-    public static List<Card> getBestCombo(Card[] cardsArr) {
+    public static CardHand getBestCombo(Card[] cardsArr) {
 
         List<Card> cardsList = Arrays.asList(cardsArr);
         Collections.sort(cardsList);
-
-        // Possible to generalize the rules for different games?
-
+    
+        // optimizing can be done on this
         // search for highest combo
-        List<Card> bestCombo = Stream.<Supplier<List<Card>>> of (
+        CardHand bestHand = Stream.<Supplier<CardHand>> of (
             () -> getHighestStraightFlush(cardsList),
             () -> getQuads(cardsList))
+            // search for highest full house
+            // search for highest flush
+            // search for highest straight
+            // search for trips and other highest 2 cards
+            // search for two pair and other highest remaining card
+            // search for pair and other highest 3 cards
+            // search for highest 5 cards
             .map(Supplier::get)
             .filter(Objects::nonNull)
             .findFirst()
             .orElse(null);
 
-        // search for highest full house
-        // search for highest flush
-        // search for highest straight
-        // search for trips and other highest 2 cards
-        // search for two pair and other highest remaining card
-        // search for pair and other highest 3 cards
-        // search for highest 5 cards
-
-        return bestCombo;
+        return bestHand;
     }
 
-    public static List<Card> getHighestStraightFlush(List<Card> sortedCardsList) {
+    public static CardHand getHighestStraightFlush(List<Card> sortedCardsList) {
         List<Card> straightFlushCards = new ArrayList<>();
         Card currentCard = null, prevCard = null;
         int indexOfSecondCardFromTop = sortedCardsList.size() - 2;
@@ -84,17 +82,18 @@ public class GameEvaluator {
         int straightFlushNumCards = straightFlushCards.size();
 
         if (straightFlushNumCards >= STRAIGHT_FLUSH_MIN_CARDS) {
-            return straightFlushCards.subList(straightFlushNumCards - STRAIGHT_FLUSH_MIN_CARDS, straightFlushNumCards);
+            return new CardHand(CardCombo.straightFlush, new ArrayList<>(straightFlushCards.subList(straightFlushNumCards - STRAIGHT_FLUSH_MIN_CARDS, straightFlushNumCards)));
         }
 
         return null;
     }
     
-    public static List<Card> getQuads(List<Card> sortedCardsList) {
+    public static CardHand getQuads(List<Card> sortedCardsList) {
         int consecutiveSameNumber = 1;
         int QUADS_NUM_CARDS = 4;
         Card prevCard = sortedCardsList.get(0), currentCard = null;
         
+        // check for consecutive 4 cards of same number
         for (int i = 1; i < sortedCardsList.size(); i++) {
             currentCard = sortedCardsList.get(i);
             if (currentCard.number == prevCard.number) {
@@ -103,7 +102,11 @@ public class GameEvaluator {
                 consecutiveSameNumber = 1;
             }
             if (consecutiveSameNumber >= QUADS_NUM_CARDS) {
-                return sortedCardsList.subList(i - (QUADS_NUM_CARDS - 1), i + 1);
+                // check if quads is the last card, and handle the high card accordingly
+                int highCardNumber = i == sortedCardsList.size() - 1 ? i - QUADS_NUM_CARDS : sortedCardsList.size() - 1;
+                List<Card> quadsList = new ArrayList<>(sortedCardsList.subList(i - (QUADS_NUM_CARDS - 1), i + 1));
+                quadsList.add(sortedCardsList.get(highCardNumber));
+                return new CardHand(CardCombo.quads, quadsList);
             }
             prevCard = currentCard;
         }

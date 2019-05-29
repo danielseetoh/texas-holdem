@@ -7,9 +7,9 @@ import java.util.ArrayList;
  */
 public class Table {
 
-    public Deck deck;
-    public ArrayList<Player> players;
-    public int maxPlayers;
+    private Deck deck;
+    private ArrayList<Player> players;
+    public final int maxPlayers;
 
     public Table(int maxPlayers) {
         this.deck = new Deck();

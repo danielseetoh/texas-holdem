@@ -48,6 +48,7 @@ public class GameEvaluatorTest {
                 new Card(CardNumber.ace, CardSuit.hearts),
                 new Card(CardNumber.ace, CardSuit.clubs),
                 new Card(CardNumber.ace, CardSuit.diamonds),
+                new Card(CardNumber.seven, CardSuit.hearts),
             },
             null,
             {
@@ -59,12 +60,17 @@ public class GameEvaluatorTest {
             }
         };
         
-        List<Card> bestCombo, expectedResult;
+        CardHand bestCombo;
+        List<Card> expectedResult;
         
         for (int i = 0; i < cardsArrayOfArrays.length; i++) {
             bestCombo = GameEvaluator.getBestCombo(cardsArrayOfArrays[i]);
             expectedResult = expectedResults[i] == null ? null : Arrays.asList(expectedResults[i]);
-            assertEquals(bestCombo, expectedResult);
+            if (bestCombo == null) {
+                assertEquals(bestCombo, expectedResult);
+            } else {
+                assertEquals(bestCombo.cards, expectedResult);
+            }
         }
     }
     
@@ -176,7 +182,8 @@ public class GameEvaluatorTest {
             null
         };
         
-        List<Card> straightFlushCombo, expectedResult;
+        CardHand straightFlushCombo;
+        List<Card> expectedResult;
         
         for (int i = 0; i < cardsArrayOfArrays.length; i++) {
             List<Card> cardsList = Arrays.asList(cardsArrayOfArrays[i]);
@@ -184,7 +191,12 @@ public class GameEvaluatorTest {
             
             straightFlushCombo = GameEvaluator.getHighestStraightFlush(cardsList);
             expectedResult = expectedResults[i] == null ? null : Arrays.asList(expectedResults[i]);
-            assertEquals(straightFlushCombo, expectedResult);
+            if (straightFlushCombo == null) {
+                assertEquals(straightFlushCombo, expectedResult);
+            } else {
+                assertEquals(straightFlushCombo.combo, CardCombo.straightFlush);
+                assertEquals(straightFlushCombo.cards, expectedResult);
+            }
         }
     }
     
@@ -199,6 +211,15 @@ public class GameEvaluatorTest {
                 new Card(CardNumber.seven, CardSuit.hearts),
                 new Card(CardNumber.six, CardSuit.hearts),
                 new Card(CardNumber.ace, CardSuit.hearts),
+            },
+            {
+                new Card(CardNumber.four, CardSuit.spades),
+                new Card(CardNumber.four, CardSuit.clubs),
+                new Card(CardNumber.three, CardSuit.hearts),
+                new Card(CardNumber.four, CardSuit.diamonds),
+                new Card(CardNumber.seven, CardSuit.hearts),
+                new Card(CardNumber.six, CardSuit.hearts),
+                new Card(CardNumber.four, CardSuit.hearts),
             },
             {
                 new Card(CardNumber.ace, CardSuit.spades),
@@ -226,12 +247,21 @@ public class GameEvaluatorTest {
                 new Card(CardNumber.ace, CardSuit.hearts),
                 new Card(CardNumber.ace, CardSuit.clubs),
                 new Card(CardNumber.ace, CardSuit.diamonds),
+                new Card(CardNumber.seven, CardSuit.hearts),
+            },
+            {
+                new Card(CardNumber.four, CardSuit.spades),
+                new Card(CardNumber.four, CardSuit.hearts),
+                new Card(CardNumber.four, CardSuit.clubs),
+                new Card(CardNumber.four, CardSuit.diamonds),
+                new Card(CardNumber.seven, CardSuit.hearts),
             },
             null,
             null
         };
         
-        List<Card> quadsCombo, expectedResult;
+        CardHand quadsCombo;
+        List<Card> expectedResult;
         
         for (int i = 0; i < cardsArrayOfArrays.length; i++) {
             List<Card> cardsList = Arrays.asList(cardsArrayOfArrays[i]);
@@ -239,7 +269,12 @@ public class GameEvaluatorTest {
             
             quadsCombo = GameEvaluator.getQuads(cardsList);
             expectedResult = expectedResults[i] == null ? null : Arrays.asList(expectedResults[i]);
-            assertEquals(quadsCombo, expectedResult);
+            if (quadsCombo == null) {
+                assertEquals(quadsCombo, expectedResult);
+            } else {
+                assertEquals(quadsCombo.combo, CardCombo.quads);
+                assertEquals(quadsCombo.cards, expectedResult);
+            }
         }
     }
 }
