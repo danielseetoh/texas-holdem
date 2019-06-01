@@ -229,10 +229,9 @@ public class GameEvaluator {
                             tripsList.add(0, sortedCardsList.get(j));
                         }
                         if (tripsList.size() >= HAND_SIZE) {
-                            break;
+                            return new CardHand(CardCombo.trips, tripsList);
                         }
                     }
-                    return new CardHand(CardCombo.trips, tripsList);
                 }
             } else {
                 tripsCounter = 1;
@@ -245,7 +244,42 @@ public class GameEvaluator {
     }
     
     public static CardHand getHighestTwoPair(List<Card> sortedCardsList) {
+        List<Card> pairsList = new ArrayList<>();
+        int numCardsPerPair = 2;
+        int lastIndexOfSortedCards = sortedCardsList.size() - 1;
+    
+        // add the first pair
+        CardHand highestPair = getHighestPair(sortedCardsList);
+        if (highestPair == null) {
+            return null;
+        }
+        pairsList.addAll(highestPair.cards.subList(HAND_SIZE - numCardsPerPair, HAND_SIZE));
         
+        List<Card> sortedCardsWithoutHighestPair = new ArrayList<>();
+        for (Card card : sortedCardsList) {
+            if (!pairsList.contains(card)) {
+                sortedCardsWithoutHighestPair.add(card);
+            }
+        }
+        
+        // add second pair
+        CardHand secondHighestPair = getHighestPair(sortedCardsWithoutHighestPair);
+        if (secondHighestPair == null) {
+            return null;
+        }
+        List<Card> secondHighestPairCards = secondHighestPair.cards;
+        pairsList.add(0, secondHighestPairCards.get(secondHighestPairCards.size() - 1));
+        pairsList.add(0, secondHighestPairCards.get(secondHighestPairCards.size() - 2));
+    
+        // cards which are part of the combo are always at the back
+        for (int i = lastIndexOfSortedCards; i >= 0; i--) {
+            if (!pairsList.contains(sortedCardsList.get(i))) {
+                pairsList.add(0, sortedCardsList.get(i));
+            }
+            if (pairsList.size() >= HAND_SIZE) {
+                return new CardHand(CardCombo.twoPair, pairsList);
+            }
+        }
         
         return null;
     }
@@ -268,10 +302,9 @@ public class GameEvaluator {
                         pairList.add(0, sortedCardsList.get(j));
                     }
                     if (pairList.size() >= HAND_SIZE) {
-                        break;
+                        return new CardHand(CardCombo.pair, pairList);
                     }
                 }
-                return new CardHand(CardCombo.pair, pairList);
             }
             
             prevCard = currentCard;

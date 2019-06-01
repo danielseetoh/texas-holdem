@@ -595,6 +595,94 @@ public class GameEvaluatorTest {
     }
     
     @Test
+    public void testGetHighestTwoPair() {
+        Card[][] cardsArrayOfArrays = new Card[][]{
+            {
+                new Card(CardNumber.ace, CardSuit.spades),
+                new Card(CardNumber.ace, CardSuit.clubs),
+                new Card(CardNumber.three, CardSuit.hearts),
+                new Card(CardNumber.ace, CardSuit.diamonds),
+                new Card(CardNumber.seven, CardSuit.hearts),
+                new Card(CardNumber.six, CardSuit.hearts),
+                new Card(CardNumber.ace, CardSuit.hearts),
+            },
+            {
+                new Card(CardNumber.four, CardSuit.spades),
+                new Card(CardNumber.three, CardSuit.hearts),
+                new Card(CardNumber.nine, CardSuit.diamonds),
+                new Card(CardNumber.seven, CardSuit.hearts),
+                new Card(CardNumber.six, CardSuit.hearts),
+                new Card(CardNumber.nine, CardSuit.hearts),
+                new Card(CardNumber.four, CardSuit.clubs),
+            },
+            {
+                new Card(CardNumber.ace, CardSuit.spades),
+                new Card(CardNumber.four, CardSuit.hearts),
+                new Card(CardNumber.three, CardSuit.spades),
+                new Card(CardNumber.five, CardSuit.hearts),
+                new Card(CardNumber.seven, CardSuit.hearts),
+                new Card(CardNumber.six, CardSuit.hearts),
+                new Card(CardNumber.ace, CardSuit.hearts),
+            },
+            {
+                new Card(CardNumber.ace, CardSuit.hearts),
+                new Card(CardNumber.two, CardSuit.hearts),
+                new Card(CardNumber.ace, CardSuit.diamonds),
+                new Card(CardNumber.five, CardSuit.hearts),
+                new Card(CardNumber.four, CardSuit.hearts),
+                new Card(CardNumber.six, CardSuit.hearts),
+                new Card(CardNumber.ace, CardSuit.spades),
+            },
+            {
+                new Card(CardNumber.ace, CardSuit.hearts),
+                new Card(CardNumber.two, CardSuit.hearts),
+                new Card(CardNumber.jack, CardSuit.diamonds),
+                new Card(CardNumber.five, CardSuit.hearts),
+                new Card(CardNumber.four, CardSuit.hearts),
+                new Card(CardNumber.six, CardSuit.hearts),
+                new Card(CardNumber.ten, CardSuit.spades),
+            }
+        };
+        
+        Card[][] expectedResults = new Card[][]{
+            {
+                new Card(CardNumber.seven, CardSuit.hearts),
+                new Card(CardNumber.ace, CardSuit.diamonds),
+                new Card(CardNumber.ace, CardSuit.clubs),
+                new Card(CardNumber.ace, CardSuit.hearts),
+                new Card(CardNumber.ace, CardSuit.spades),
+            },
+            {
+                new Card(CardNumber.seven, CardSuit.hearts),
+                new Card(CardNumber.four, CardSuit.clubs),
+                new Card(CardNumber.four, CardSuit.spades),
+                new Card(CardNumber.nine, CardSuit.diamonds),
+                new Card(CardNumber.nine, CardSuit.hearts),
+            },
+            null,
+            null,
+            null
+        };
+        
+        CardHand highestTwoPairCombo;
+        List<Card> expectedResult;
+        
+        for (int i = 0; i < cardsArrayOfArrays.length; i++) {
+            List<Card> cardsList = Arrays.asList(cardsArrayOfArrays[i]);
+            Collections.sort(cardsList);
+            
+            highestTwoPairCombo = GameEvaluator.getHighestTwoPair(cardsList);
+            expectedResult = expectedResults[i] == null ? null : Arrays.asList(expectedResults[i]);
+            if (highestTwoPairCombo == null) {
+                assertEquals(expectedResult, highestTwoPairCombo);
+            } else {
+                assertEquals(CardCombo.twoPair, highestTwoPairCombo.combo);
+                assertEquals(expectedResult, highestTwoPairCombo.cards);
+            }
+        }
+    }
+    
+    @Test
     public void testGetHighestPair() {
         Card[][] cardsArrayOfArrays = new Card[][]{
             {
