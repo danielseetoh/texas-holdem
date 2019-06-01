@@ -118,6 +118,8 @@ public class GameEvaluator {
                 // check if quads is the last card, and handle the high card accordingly
                 int highCardNumber = i == sortedCardsList.size() - 1 ? i - numRequiredCards : sortedCardsList.size() - 1;
                 List<Card> quadsList = new ArrayList<>(sortedCardsList.subList(i - (numRequiredCards - 1), i + 1));
+                
+                // cards which are part of the combo are always at the back
                 quadsList.add(0, sortedCardsList.get(highCardNumber));
                 return new CardHand(CardCombo.quads, quadsList);
             }
@@ -220,6 +222,8 @@ public class GameEvaluator {
                 tripsCounter++;
                 if (tripsCounter >= numRequiredCards) {
                     List<Card> tripsList = new ArrayList<>(sortedCardsList.subList(i, i+numRequiredCards));
+                    
+                    // cards which are part of the combo are always at the back
                     for (int j = lastIndexOfSortedCards; j >= 0; j--) {
                         if (!tripsList.contains(sortedCardsList.get(j))) {
                             tripsList.add(0, sortedCardsList.get(j));
@@ -242,11 +246,36 @@ public class GameEvaluator {
     
     public static CardHand getHighestTwoPair(List<Card> sortedCardsList) {
         
+        
         return null;
     }
     
     public static CardHand getHighestPair(List<Card> sortedCardsList) {
+        int numSortedCards = sortedCardsList.size();
+        int lastIndexOfSortedCards = numSortedCards - 1;
+        int numRequiredCards = 2;
+        Card prevCard = sortedCardsList.get(lastIndexOfSortedCards);
+        Card currentCard;
         
+        for (int i = lastIndexOfSortedCards - 1; i >= 0; i--) {
+            currentCard = sortedCardsList.get(i);
+            if (currentCard.number == prevCard.number) {
+                List<Card> pairList = new ArrayList<>(sortedCardsList.subList(i, i+numRequiredCards));
+    
+                // cards which are part of the combo are always at the back
+                for (int j = lastIndexOfSortedCards; j >= 0; j--) {
+                    if (!pairList.contains(sortedCardsList.get(j))) {
+                        pairList.add(0, sortedCardsList.get(j));
+                    }
+                    if (pairList.size() >= HAND_SIZE) {
+                        break;
+                    }
+                }
+                return new CardHand(CardCombo.pair, pairList);
+            }
+            
+            prevCard = currentCard;
+        }
         
         return null;
     }
