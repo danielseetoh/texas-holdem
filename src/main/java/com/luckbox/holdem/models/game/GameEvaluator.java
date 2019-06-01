@@ -26,14 +26,14 @@ public class GameEvaluator {
         // search for highest combo
         CardHand bestHand = Stream.<Supplier<CardHand>> of (
             () -> getHighestStraightFlush(cardsList),
-            () -> getQuads(cardsList))
-            // search for highest full house
-            // search for highest flush
-            // search for highest straight
-            // search for trips and other highest 2 cards
-            // search for two pair and other highest remaining card
-            // search for pair and other highest 3 cards
-            // search for highest 5 cards
+            () -> getQuads(cardsList),
+            () -> getHighestFullHouse(cardsList),
+            () -> getHighestFlush(cardsList),
+            () -> getHighestStraight(cardsList),
+            () -> getHighestTrips(cardsList),
+            () -> getHighestTwoPair(cardsList),
+            () -> getHighestPair(cardsList),
+            () -> getHighestFiveCards(cardsList))
             .map(Supplier::get)
             .filter(Objects::nonNull)
             .findFirst()
@@ -110,6 +110,41 @@ public class GameEvaluator {
             }
             prevCard = currentCard;
         }
+        
+        return null;
+    }
+    
+    public static CardHand getHighestFullHouse(List<Card> sortedCardsList) {
+        
+        return null;
+    }
+    
+    public static CardHand getHighestFlush(List<Card> sortedCardsList) {
+        
+        return null;
+    }
+    
+    public static CardHand getHighestStraight(List<Card> sortedCardsList) {
+        
+        return null;
+    }
+    
+    public static CardHand getHighestTrips(List<Card> sortedCardsList) {
+        
+        return null;
+    }
+    
+    public static CardHand getHighestTwoPair(List<Card> sortedCardsList) {
+        
+        return null;
+    }
+    
+    public static CardHand getHighestPair(List<Card> sortedCardsList) {
+        
+        return null;
+    }
+    
+    public static CardHand getHighestFiveCards(List<Card> sortedCardsList) {
         
         return null;
     }
