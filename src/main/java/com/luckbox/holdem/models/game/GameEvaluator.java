@@ -8,6 +8,9 @@ import java.util.stream.Stream;
  * Created by danielseetoh on 5/7/19.
  */
 public class GameEvaluator {
+    
+    static final int HAND_SIZE = 5;
+    
     public List<Player> getWinningPlayers(Player[] players, Card[] communityCards) {
         // get best combo of each player
 
@@ -45,7 +48,6 @@ public class GameEvaluator {
     public static CardHand getHighestStraightFlush(List<Card> sortedCardsList) {
         List<Card> straightFlushCards = new ArrayList<>();
         Card currentCard = null, prevCard = null;
-        int numRequiredCards = 5;
         
         // check for flush
         CardHand flushHand = getHighestFlush(sortedCardsList);
@@ -73,7 +75,7 @@ public class GameEvaluator {
             if (currentCard.number.ordinal() == prevCard.number.ordinal() - 1) {
                 straightFlushCards.add(0, currentCard);
             } else {
-                if (straightFlushCards.size() >= numRequiredCards) {
+                if (straightFlushCards.size() >= HAND_SIZE) {
                     break;
                 }
                 straightFlushCards.clear();
@@ -82,7 +84,7 @@ public class GameEvaluator {
         }
 
         // handle a wheel (e.g. ace to five)
-        if (straightFlushCards.size() == numRequiredCards - 1) {
+        if (straightFlushCards.size() == HAND_SIZE - 1) {
             currentCard = straightFlushCards.get(0);
             Card aceWheelCard = new Card(CardNumber.ace, currentCard.suit);
             if (currentCard.number == CardNumber.two && sortedCardsList.contains(aceWheelCard)) {
@@ -92,8 +94,8 @@ public class GameEvaluator {
 
         int straightFlushNumCards = straightFlushCards.size();
 
-        if (straightFlushNumCards >= numRequiredCards) {
-            return new CardHand(CardCombo.straightFlush, new ArrayList<>(straightFlushCards.subList(straightFlushNumCards - numRequiredCards, straightFlushNumCards)));
+        if (straightFlushNumCards >= HAND_SIZE) {
+            return new CardHand(CardCombo.straightFlush, new ArrayList<>(straightFlushCards.subList(straightFlushNumCards - HAND_SIZE, straightFlushNumCards)));
         }
 
         return null;
@@ -116,7 +118,7 @@ public class GameEvaluator {
                 // check if quads is the last card, and handle the high card accordingly
                 int highCardNumber = i == sortedCardsList.size() - 1 ? i - numRequiredCards : sortedCardsList.size() - 1;
                 List<Card> quadsList = new ArrayList<>(sortedCardsList.subList(i - (numRequiredCards - 1), i + 1));
-                quadsList.add(sortedCardsList.get(highCardNumber));
+                quadsList.add(0, sortedCardsList.get(highCardNumber));
                 return new CardHand(CardCombo.quads, quadsList);
             }
             prevCard = currentCard;
@@ -131,7 +133,6 @@ public class GameEvaluator {
     }
     
     public static CardHand getHighestFlush(List<Card> sortedCardsList) {
-        int numRequiredCards = 5;
         List<List<Card>> flushList = new ArrayList<>();
         for (int i = 0; i < CardSuit.values().length; i++) {
             flushList.add(new ArrayList<Card>());
@@ -146,8 +147,8 @@ public class GameEvaluator {
         // run through the arraylists
         // if there is an arraylist with 5 or more cards, trim to 5 and return in CardHand
         for (List<Card> flushCards : flushList) {
-            if (flushCards.size() >= numRequiredCards) {
-                List<Card> highestFlushCards = new ArrayList<>(flushCards.subList(flushCards.size() - numRequiredCards, flushCards.size()));
+            if (flushCards.size() >= HAND_SIZE) {
+                List<Card> highestFlushCards = new ArrayList<>(flushCards.subList(flushCards.size() - HAND_SIZE, flushCards.size()));
                 return new CardHand(CardCombo.flush, highestFlushCards);
             }
         }
@@ -158,7 +159,6 @@ public class GameEvaluator {
     public static CardHand getHighestStraight(List<Card> sortedCardsList) {
         List<Card> straightCards = new ArrayList<>();
         Card currentCard = null, prevCard = null;
-        int numRequiredCards = 5;
     
         // iterate through the cards from top down
         for (int i = sortedCardsList.size() - 1; i >= 0; i--) {
@@ -176,7 +176,7 @@ public class GameEvaluator {
             if (currentCard.number.ordinal() == prevCard.number.ordinal() - 1) {
                 straightCards.add(0, currentCard);
             } else {
-                if (straightCards.size() >= numRequiredCards) {
+                if (straightCards.size() >= HAND_SIZE) {
                     break;
                 }
                 straightCards.clear();
@@ -185,7 +185,7 @@ public class GameEvaluator {
         }
     
         // handle a wheel (e.g. ace to five)
-        if (straightCards.size() == numRequiredCards - 1) {
+        if (straightCards.size() == HAND_SIZE - 1) {
             currentCard = straightCards.get(0);
             if (currentCard.number == CardNumber.two) {
                 for (Card card : sortedCardsList) {
@@ -198,14 +198,44 @@ public class GameEvaluator {
     
         int straightNumCards = straightCards.size();
     
-        if (straightNumCards >= numRequiredCards) {
-            return new CardHand(CardCombo.straight, new ArrayList<>(straightCards.subList(straightNumCards - numRequiredCards, straightNumCards)));
+        if (straightNumCards >= HAND_SIZE) {
+            return new CardHand(CardCombo.straight, new ArrayList<>(straightCards.subList(straightNumCards - HAND_SIZE, straightNumCards)));
         }
     
         return null;
     }
     
     public static CardHand getHighestTrips(List<Card> sortedCardsList) {
+        int tripsCounter = 1;
+        int numSortedCards = sortedCardsList.size();
+        int numRequiredCards = 3;
+        int lastIndexOfSortedCards = numSortedCards - 1;
+        Card prevCard = sortedCardsList.get(lastIndexOfSortedCards);
+        Card currentCard;
+        
+        for (int i = lastIndexOfSortedCards - 1; i >= 0; i--) {
+            currentCard = sortedCardsList.get(i);
+            
+            if (currentCard.number == prevCard.number) {
+                tripsCounter++;
+                if (tripsCounter >= numRequiredCards) {
+                    List<Card> tripsList = new ArrayList<>(sortedCardsList.subList(i, i+numRequiredCards));
+                    for (int j = lastIndexOfSortedCards; j >= 0; j--) {
+                        if (!tripsList.contains(sortedCardsList.get(j))) {
+                            tripsList.add(0, sortedCardsList.get(j));
+                        }
+                        if (tripsList.size() >= HAND_SIZE) {
+                            break;
+                        }
+                    }
+                    return new CardHand(CardCombo.trips, tripsList);
+                }
+            } else {
+                tripsCounter = 1;
+            }
+            
+            prevCard = currentCard;
+        }
         
         return null;
     }
@@ -217,14 +247,14 @@ public class GameEvaluator {
     
     public static CardHand getHighestPair(List<Card> sortedCardsList) {
         
+        
         return null;
     }
     
     public static CardHand getHighestFiveCards(List<Card> sortedCardsList) {
         int numSortedCards = sortedCardsList.size();
-        int numRequiredCards = 5;
         
-        List<Card> highestFiveCards =  new ArrayList<>(sortedCardsList.subList(numSortedCards - numRequiredCards, numSortedCards));
+        List<Card> highestFiveCards =  new ArrayList<>(sortedCardsList.subList(numSortedCards - HAND_SIZE, numSortedCards));
         
         return new CardHand(CardCombo.highCard, highestFiveCards);
     }

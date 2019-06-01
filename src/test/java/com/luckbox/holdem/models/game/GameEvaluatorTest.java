@@ -44,11 +44,11 @@ public class GameEvaluatorTest {
         
         Card[][] expectedResults = new Card[][]{
             {
+                new Card(CardNumber.seven, CardSuit.hearts),
                 new Card(CardNumber.ace, CardSuit.diamonds),
                 new Card(CardNumber.ace, CardSuit.clubs),
                 new Card(CardNumber.ace, CardSuit.hearts),
                 new Card(CardNumber.ace, CardSuit.spades),
-                new Card(CardNumber.seven, CardSuit.hearts),
             },
             {
                 new Card(CardNumber.four, CardSuit.hearts),
@@ -249,18 +249,18 @@ public class GameEvaluatorTest {
         
         Card[][] expectedResults = new Card[][]{
             {
+                new Card(CardNumber.seven, CardSuit.hearts),
                 new Card(CardNumber.ace, CardSuit.diamonds),
                 new Card(CardNumber.ace, CardSuit.clubs),
                 new Card(CardNumber.ace, CardSuit.hearts),
                 new Card(CardNumber.ace, CardSuit.spades),
-                new Card(CardNumber.seven, CardSuit.hearts),
             },
             {
+                new Card(CardNumber.seven, CardSuit.hearts),
                 new Card(CardNumber.four, CardSuit.diamonds),
                 new Card(CardNumber.four, CardSuit.clubs),
                 new Card(CardNumber.four, CardSuit.hearts),
                 new Card(CardNumber.four, CardSuit.spades),
-                new Card(CardNumber.seven, CardSuit.hearts),
             },
             null,
             null
@@ -506,6 +506,90 @@ public class GameEvaluatorTest {
             } else {
                 assertEquals(CardCombo.straight, straightCombo.combo);
                 assertEquals(expectedResult, straightCombo.cards);
+            }
+        }
+    }
+    
+    @Test
+    public void getHighestTrips() {
+        Card[][] cardsArrayOfArrays = new Card[][]{
+            {
+                new Card(CardNumber.ace, CardSuit.spades),
+                new Card(CardNumber.ace, CardSuit.clubs),
+                new Card(CardNumber.three, CardSuit.hearts),
+                new Card(CardNumber.ace, CardSuit.diamonds),
+                new Card(CardNumber.seven, CardSuit.hearts),
+                new Card(CardNumber.six, CardSuit.hearts),
+                new Card(CardNumber.ace, CardSuit.hearts),
+            },
+            {
+                new Card(CardNumber.four, CardSuit.spades),
+                new Card(CardNumber.four, CardSuit.clubs),
+                new Card(CardNumber.three, CardSuit.hearts),
+                new Card(CardNumber.four, CardSuit.diamonds),
+                new Card(CardNumber.seven, CardSuit.hearts),
+                new Card(CardNumber.six, CardSuit.hearts),
+                new Card(CardNumber.four, CardSuit.hearts),
+            },
+            {
+                new Card(CardNumber.ace, CardSuit.spades),
+                new Card(CardNumber.four, CardSuit.hearts),
+                new Card(CardNumber.three, CardSuit.spades),
+                new Card(CardNumber.five, CardSuit.hearts),
+                new Card(CardNumber.seven, CardSuit.hearts),
+                new Card(CardNumber.six, CardSuit.hearts),
+                new Card(CardNumber.ace, CardSuit.hearts),
+            },
+            {
+                new Card(CardNumber.ace, CardSuit.hearts),
+                new Card(CardNumber.two, CardSuit.hearts),
+                new Card(CardNumber.ace, CardSuit.diamonds),
+                new Card(CardNumber.five, CardSuit.hearts),
+                new Card(CardNumber.four, CardSuit.hearts),
+                new Card(CardNumber.six, CardSuit.hearts),
+                new Card(CardNumber.ace, CardSuit.spades),
+            }
+        };
+        
+        Card[][] expectedResults = new Card[][]{
+            {
+                new Card(CardNumber.seven, CardSuit.hearts),
+                new Card(CardNumber.ace, CardSuit.diamonds),
+                new Card(CardNumber.ace, CardSuit.clubs),
+                new Card(CardNumber.ace, CardSuit.hearts),
+                new Card(CardNumber.ace, CardSuit.spades),
+            },
+            {
+                new Card(CardNumber.six, CardSuit.hearts),
+                new Card(CardNumber.seven, CardSuit.hearts),
+                new Card(CardNumber.four, CardSuit.clubs),
+                new Card(CardNumber.four, CardSuit.hearts),
+                new Card(CardNumber.four, CardSuit.spades),
+            },
+            null,
+            {
+                new Card(CardNumber.five, CardSuit.hearts),
+                new Card(CardNumber.six, CardSuit.hearts),
+                new Card(CardNumber.ace, CardSuit.diamonds),
+                new Card(CardNumber.ace, CardSuit.hearts),
+                new Card(CardNumber.ace, CardSuit.spades),
+            }
+        };
+        
+        CardHand tripsCombo;
+        List<Card> expectedResult;
+        
+        for (int i = 0; i < cardsArrayOfArrays.length; i++) {
+            List<Card> cardsList = Arrays.asList(cardsArrayOfArrays[i]);
+            Collections.sort(cardsList);
+            
+            tripsCombo = GameEvaluator.getHighestTrips(cardsList);
+            expectedResult = expectedResults[i] == null ? null : Arrays.asList(expectedResults[i]);
+            if (tripsCombo == null) {
+                assertEquals(expectedResult, tripsCombo);
+            } else {
+                assertEquals(CardCombo.trips, tripsCombo.combo);
+                assertEquals(expectedResult, tripsCombo.cards);
             }
         }
     }
