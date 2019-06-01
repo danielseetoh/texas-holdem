@@ -120,7 +120,9 @@ public class GameEvaluator {
                 List<Card> quadsList = new ArrayList<>(sortedCardsList.subList(i - (numRequiredCards - 1), i + 1));
                 
                 // cards which are part of the combo are always at the back
-                quadsList.add(0, sortedCardsList.get(highCardNumber));
+                if (sortedCardsList.size() > highCardNumber) {
+                    quadsList.add(0, sortedCardsList.get(highCardNumber));
+                }
                 return new CardHand(CardCombo.quads, quadsList);
             }
             prevCard = currentCard;
@@ -130,6 +132,37 @@ public class GameEvaluator {
     }
     
     public static CardHand getHighestFullHouse(List<Card> sortedCardsList) {
+        List<Card> fullHouseList = new ArrayList<>();
+        int numCardsPerTrips = 3;
+        int numCardsPerPair = 2;
+        int lastIndexOfSortedCards = sortedCardsList.size() - 1;
+    
+        // add trips
+        CardHand highestTrips = getHighestTrips(sortedCardsList);
+        if (highestTrips == null) {
+            return null;
+        }
+        fullHouseList.addAll(highestTrips.cards.subList(HAND_SIZE - numCardsPerTrips, HAND_SIZE));
+        
+        List<Card> sortedCardsWithoutHighestTrips = new ArrayList<>();
+        for (Card card : sortedCardsList) {
+            if (!fullHouseList.contains(card)) {
+                sortedCardsWithoutHighestTrips.add(card);
+            }
+        }
+    
+        // add pair
+        CardHand highestPair = getHighestPair(sortedCardsWithoutHighestTrips);
+        if (highestPair == null) {
+            return null;
+        }
+        List<Card> highestPairCards = highestPair.cards;
+        fullHouseList.add(0, highestPairCards.get(highestPairCards.size() - 1));
+        fullHouseList.add(0, highestPairCards.get(highestPairCards.size() - 2));
+    
+        if (fullHouseList.size() == HAND_SIZE) {
+            return new CardHand(CardCombo.fullHouse, fullHouseList);
+        }
         
         return null;
     }
@@ -229,9 +262,10 @@ public class GameEvaluator {
                             tripsList.add(0, sortedCardsList.get(j));
                         }
                         if (tripsList.size() >= HAND_SIZE) {
-                            return new CardHand(CardCombo.trips, tripsList);
+                            break;
                         }
                     }
+                    return new CardHand(CardCombo.trips, tripsList);
                 }
             } else {
                 tripsCounter = 1;
@@ -277,11 +311,11 @@ public class GameEvaluator {
                 pairsList.add(0, sortedCardsList.get(i));
             }
             if (pairsList.size() >= HAND_SIZE) {
-                return new CardHand(CardCombo.twoPair, pairsList);
+                break;
             }
         }
-        
-        return null;
+    
+        return new CardHand(CardCombo.twoPair, pairsList);
     }
     
     public static CardHand getHighestPair(List<Card> sortedCardsList) {
@@ -302,9 +336,10 @@ public class GameEvaluator {
                         pairList.add(0, sortedCardsList.get(j));
                     }
                     if (pairList.size() >= HAND_SIZE) {
-                        return new CardHand(CardCombo.pair, pairList);
+                        break;
                     }
                 }
+                return new CardHand(CardCombo.pair, pairList);
             }
             
             prevCard = currentCard;
