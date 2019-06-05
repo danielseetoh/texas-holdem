@@ -1,6 +1,4 @@
-package com.luckbox.holdem.models.game;
-
-import java.util.List;
+package com.luckbox.holdem.components.game;
 
 public enum CardCombo {
     highCard, pair, twoPair, trips, straight, flush, fullHouse, quads, straightFlush

@@ -1,19 +1,15 @@
 package com.luckbox.holdem.controllers;
 
 
-import com.luckbox.holdem.models.game.Card;
-import com.luckbox.holdem.models.game.Deck;
-import com.luckbox.holdem.models.game.GameEvaluator;
-import com.luckbox.holdem.models.game.Player;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.luckbox.holdem.components.game.Card;
+import com.luckbox.holdem.components.game.Deck;
+import com.luckbox.holdem.components.game.GameEvaluator;
+import com.luckbox.holdem.components.game.Player;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.luckbox.holdem.models.User;
-import com.luckbox.holdem.repositories.UserRepository;
 /**
  * Created by danielseetoh on 5/22/19.
  */

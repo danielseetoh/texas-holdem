@@ -1,8 +1,6 @@
-package com.luckbox.holdem.models.game;
+package com.luckbox.holdem.components.game;
 
 import com.luckbox.holdem.models.User;
-
-import java.util.ArrayList;
 
 /**
  * Created by danielseetoh on 5/7/19.

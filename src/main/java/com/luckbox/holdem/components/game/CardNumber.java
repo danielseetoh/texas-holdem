@@ -1,4 +1,4 @@
-package com.luckbox.holdem.models.game;
+package com.luckbox.holdem.components.game;
 
 /**
  * Created by danielseetoh on 5/6/19.
